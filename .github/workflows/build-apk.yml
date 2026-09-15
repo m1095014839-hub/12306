@@ -1,16 +1,16 @@
 name: Build Android APK
 
 on:
-  workflow_dispatch:
+workflow_dispatch:
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
+build:
+runs-on: ubuntu-latest
+steps:
 - name: Checkout
 uses: actions/checkout@v4
 
-- name: Setup Java
+  - name: Setup Java
     uses: actions/setup-java@v4
     with:
       java-version: '17'
