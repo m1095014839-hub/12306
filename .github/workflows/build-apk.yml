@@ -1,4 +1,14 @@
-- name: 检出源码
+name: Build Android APK
+
+on:
+workflow_dispatch:
+
+jobs:
+build:
+runs-on: ubuntu-latest
+
+steps:
+  - name: 检出源码
     uses: actions/checkout@v4
 
   - name: 配置 JDK 17
@@ -7,15 +17,18 @@
       java-version: '17'
       distribution: 'temurin'
 
-  - name: 配置 Python 3.13（匹配 Chaquopy 要求）
+  - name: 配置 Python 3.13
     uses: actions/setup-python@v5
     with:
       python-version: '3.13'
 
-  - name: 检查 Python 版本与路径
+  - name: 检查 Python 运行环境并创建符号链接
     run: |
-      which python3.13 || true
-      python3.13 --version || python --version
+      which python
+      python --version
+      # 确保系统能通过 python3.13 命令直接调用
+      sudo ln -sf $(which python) /usr/local/bin/python3.13 || true
+      python3.13 --version
 
   - name: 赋予 gradlew 执行权限
     run: chmod +x android/gradlew
