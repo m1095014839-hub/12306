@@ -5,40 +5,36 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+runs-on: ubuntu-latest
+steps:
+- name: Checkout
+uses: actions/checkout@v4
 
-    steps:
-      - name: 检出源码
-    uses: actions/checkout@v4
-
-  - name: 配置 JDK 17
-    uses: actions/setup-java@v5
+  - name: Setup Java
+    uses: actions/setup-java@v4
     with:
       java-version: '17'
       distribution: 'temurin'
 
-  - name: 配置 Python 3.13
+  - name: Setup Python
     uses: actions/setup-python@v5
     with:
       python-version: '3.13'
 
-  - name: 检查 Python 运行环境并创建符号链接
+  - name: Symlink Python
     run: |
-      which python
-      python --version
       sudo ln -sf $(which python) /usr/local/bin/python3.13 || true
       python3.13 --version
 
-  - name: 赋予 gradlew 执行权限
+  - name: Make Gradlew Executable
     run: chmod +x android/gradlew
 
-  - name: 执行 Gradle 打包 Debug APK
+  - name: Build APK
     run: |
       cd android
-      ./gradlew assembleDebug --no-daemon --stacktrace -Dorg.gradle.jvmargs="-Xmx4096m -XX:MaxMetaspaceSize=1024m"
+      ./gradlew assembleDebug --no-daemon
 
-  - name: 上传 APK 产物
-    if: success()
+  - name: Upload Artifact
     uses: actions/upload-artifact@v4
     with:
       name: 12306-helper-debug-apk
