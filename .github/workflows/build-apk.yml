@@ -1,14 +1,14 @@
 name: Build Android APK
 
 on:
-workflow_dispatch:
+  workflow_dispatch:
 
 jobs:
-build:
-runs-on: ubuntu-latest
+  build:
+    runs-on: ubuntu-latest
 
-steps:
-  - name: 检出源码
+    steps:
+      - name: 检出源码
     uses: actions/checkout@v4
 
   - name: 配置 JDK 17
@@ -26,7 +26,6 @@ steps:
     run: |
       which python
       python --version
-      # 确保系统能通过 python3.13 命令直接调用
       sudo ln -sf $(which python) /usr/local/bin/python3.13 || true
       python3.13 --version
 
